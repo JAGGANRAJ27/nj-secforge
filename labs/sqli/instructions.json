@@ -1,0 +1,11 @@
+{
+  "title": "SQL Injection - Login Bypass",
+  "goal": "Login without knowing password",
+  "hint": "Try SQL comment --",
+  "difficulty": "Easy",
+  "owasp": "A03: Injection",
+  "challenge": {
+    "type": "login-bypass",
+    "successMessage": "You bypassed authentication using SQL Injection!"
+  }
+}

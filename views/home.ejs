@@ -1,0 +1,72 @@
+<% completed=completed || []; %>
+
+  <h1>🔥 NJ SecForge</h1>
+  <h3>OWASP Top 10 Interactive Labs</h3>
+
+  <hr>
+  <h2>📊 Your Progress</h2>
+
+  <p>
+    <b>
+      <%= completedCount %>
+    </b> /
+    <b>
+      <%= totalLabs %>
+    </b> Labs Completed
+  </p>
+
+  <div style="
+  width:400px;
+  background:#eee;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:20px;
+">
+
+    <div style="
+    width:<%= percentage %>%;
+    background:
+<%= percentage === 100 ? " #2196F3" : "#4CAF50" %>;
+      color:white;
+      padding:8px;
+      text-align:center;
+      ">
+      <%= percentage %>%
+    </div>
+
+  </div>
+
+  <% labs.forEach(lab=> { %>
+
+
+    <div style="
+    border:1px solid #ccc;
+    padding:15px;
+    margin:10px;
+  ">
+
+      <h2>
+        <%= lab.title %>
+      </h2>
+      <p><b>OWASP:</b>
+        <%= lab.owasp %>
+      </p>
+      <p><b>Difficulty:</b>
+        <%= lab.difficulty %>
+      </p>
+
+      <% const isCompleted=completed .map(l=> l.trim().toLowerCase())
+        .includes(lab.name.trim().toLowerCase());
+        %>
+
+        <% if (isCompleted) { %>
+          <p style="color:green;">✔ Completed</p>
+          <% } else { %>
+            <p style="color:red;">Not Completed</p>
+            <% } %>
+              <a href="/lab/<%= lab.name %>?mode=vulnerable">
+                Start Lab →
+              </a>
+
+    </div>
+    <% }) %>

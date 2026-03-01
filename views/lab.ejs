@@ -1,0 +1,45 @@
+<h2>Mode:</h2>
+
+<a href="/lab/<%= lab.name %>?mode=vulnerable">
+🔴 Vulnerable Mode
+</a>
+
+|
+<a href="/lab/<%= lab.name %>?mode=secure">
+🟢 Secure Mode
+</a>
+<hr>
+
+<a href="/reset/<%= lab.name %>"
+   style="
+     background:#f44336;
+     color:white;
+     padding:8px 12px;
+     text-decoration:none;
+     border-radius:5px;
+   ">
+   🔄 Reset Lab
+</a>
+
+<hr>
+<hr>
+
+<h1><%= lab.instructions.title %></h1>
+
+<p><b>OWASP:</b> <%= lab.instructions.owasp %></p>
+<p><b>Goal:</b> <%= lab.instructions.goal %></p>
+<p><b>Hint:</b> <%= lab.instructions.hint %></p>
+<h3>🎯 Challenge Goal</h3>
+<p><%= lab.instructions.goal %></p>
+
+<p><b>Difficulty:</b> <%= lab.instructions.difficulty %></p>
+
+<hr>
+
+<h3>Practice Area</h3>
+
+<form method="POST" action="/attack/<%= lab.name %>?mode=<%= mode %>">
+  <input name="username" placeholder="username">
+  <input name="password" placeholder="password">
+  <button>Login</button>
+</form>
