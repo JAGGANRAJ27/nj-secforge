@@ -83,6 +83,10 @@ app.post("/attack/:name", (req, res) => {
       <a href="/lab/${req.params.name}?mode=${mode}">
         Back to Lab
       </a>
+      <p> ( or ) </p>
+      <a href="/">
+        Back to Homepage
+      </a>
     `);
   });
 });
