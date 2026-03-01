@@ -1,45 +1,294 @@
-<h2>Mode:</h2>
+<!DOCTYPE html>
 
-<a href="/lab/<%= lab.name %>?mode=vulnerable">
-🔴 Vulnerable Mode
+<html>
+<head>
+  <title><%= lab.instructions.title %></title>
+
+<style>
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f6fb;
+  margin:0;
+}
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:30px;
+}
+
+/* ---------- TOP BAR ---------- */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.mode-buttons a{
+  text-decoration:none;
+  padding:8px 14px;
+  border-radius:6px;
+  margin-right:10px;
+  color:white;
+  font-size:14px;
+}
+
+.vuln{ background:#e53935; }
+.secure{ background:#43a047; }
+
+.active{
+  box-shadow:0 0 0 3px rgba(0,0,0,.15) inset;
+}
+
+.reset-btn{
+  background:#333;
+  color:white;
+  padding:8px 14px;
+  border-radius:6px;
+  text-decoration:none;
+}
+
+/* ---------- GRID ---------- */
+
+.lab-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+}
+
+.card{
+  background:white;
+  padding:22px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.badge{
+  display:inline-block;
+  background:#eef2ff;
+  padding:4px 10px;
+  border-radius:6px;
+  margin:5px 0;
+  font-size:13px;
+}
+
+input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+button{
+  margin-top:15px;
+  padding:10px;
+  width:100%;
+  background:#333;
+  color:white;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{ background:black; }
+
+.hint{
+  background:#fff8e1;
+  padding:10px;
+  border-radius:6px;
+  margin-top:10px;
+}
+
+/* ---------- CONSOLE ---------- */
+
+.console-card{
+  margin-top:25px;
+  background:#0d1117;
+  color:#00ff9c;
+  font-family:monospace;
+}
+
+.console-title{ color:white; }
+
+#console{ padding:10px; }
+
+.console-line{
+  margin:6px 0;
+  white-space:pre-wrap;
+}
+
+.console-success{ color:#4caf50; }
+.console-error{ color:#ff5252; }
+.console-info{ color:#00ff9c; }
+.console-query{ color:#9cdcfe; }
+
+.sql-comment{
+  color:#6a9955;
+  font-style:italic;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🧪 <%= lab.instructions.title %></h1>
+
+<div class="topbar">
+
+  <div class="mode-buttons">
+    <a class="vuln <%= mode==='vulnerable'?'active':'' %>"
+       href="/lab/<%= lab.name %>?mode=vulnerable">
+       🔴 Vulnerable Mode
+    </a>
+
+
+<a class="secure <%= mode==='secure'?'active':'' %>"
+   href="/lab/<%= lab.name %>?mode=secure">
+   🟢 Secure Mode
 </a>
 
-|
-<a href="/lab/<%= lab.name %>?mode=secure">
-🟢 Secure Mode
-</a>
-<hr>
 
-<a href="/reset/<%= lab.name %>"
-   style="
-     background:#f44336;
-     color:white;
-     padding:8px 12px;
-     text-decoration:none;
-     border-radius:5px;
-   ">
-   🔄 Reset Lab
-</a>
+  </div>
 
-<hr>
-<hr>
+  <a class="reset-btn" href="/reset/<%= lab.name %>">
+    🔄 Reset Lab
+  </a>
 
-<h1><%= lab.instructions.title %></h1>
+</div>
 
-<p><b>OWASP:</b> <%= lab.instructions.owasp %></p>
-<p><b>Goal:</b> <%= lab.instructions.goal %></p>
-<p><b>Hint:</b> <%= lab.instructions.hint %></p>
-<h3>🎯 Challenge Goal</h3>
-<p><%= lab.instructions.goal %></p>
+<div class="lab-grid">
 
-<p><b>Difficulty:</b> <%= lab.instructions.difficulty %></p>
+<div class="card">
+  <h2>📘 Lab Information</h2>
 
-<hr>
+  <div class="badge">OWASP: <%= lab.instructions.owasp %></div><br>
+  <div class="badge">Difficulty: <%= lab.instructions.difficulty %></div>
 
-<h3>Practice Area</h3>
+  <h3>🎯 Goal</h3>
+  <p><%= lab.instructions.goal %></p>
 
-<form method="POST" action="/attack/<%= lab.name %>?mode=<%= mode %>">
-  <input name="username" placeholder="username">
-  <input name="password" placeholder="password">
-  <button>Login</button>
-</form>
+  <div class="hint">
+    💡 Hint: <%= lab.instructions.hint %>
+  </div>
+</div>
+
+<div class="card">
+  <h2>💻 Practice Area</h2>
+
+  <form method="POST"
+        action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+
+<input name="username" placeholder="Username">
+<input name="password" placeholder="Password">
+
+<button>Login</button>
+
+  </form>
+</div>
+
+</div>
+
+<% if (consoleOutput) { %>
+
+<div class="card console-card">
+  <h2 class="console-title">🖥 Live Attack Console</h2>
+  <div id="console"></div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const consoleLines = [];
+
+  consoleLines.push({
+    text:"Executing query...",
+    type:"info"
+  });
+
+  consoleLines.push({
+    text:<%- JSON.stringify(consoleOutput.query) %>,
+    type:"query"
+  });
+
+  consoleLines.push({
+    text:<%- JSON.stringify(
+      consoleOutput.success
+        ? "Authentication Success"
+        : "Authentication Failed"
+    ) %>,
+    type:"<%= consoleOutput.success ? "success" : "error" %>"
+  });
+
+  consoleLines.push({
+    text:<%- JSON.stringify(consoleOutput.message) %>,
+    type:"info"
+  });
+
+  <% if(consoleOutput.completed){ %>
+  consoleLines.push({
+    text:"Challenge Completed ✅",
+    type:"success"
+  });
+  <% } %>
+
+  function highlightSQL(query){
+    return query.replace(/(--.*)/g,
+      '<span class="sql-comment">$1</span>');
+  }
+
+  function typeLine(lineObj, callback){
+
+    const consoleEl=document.getElementById("console");
+    const line=document.createElement("p");
+
+    line.className="console-line console-"+lineObj.type;
+    consoleEl.appendChild(line);
+
+    let text=lineObj.text;
+
+    if(lineObj.type==="query"){
+      text=highlightSQL(text);
+    }
+
+    let i=0;
+
+    function type(){
+      if(i<text.length){
+        line.innerHTML=text.substring(0,i+1);
+        i++;
+        setTimeout(type,15);
+      }else{
+        callback();
+      }
+    }
+
+    type();
+  }
+
+  function runConsole(lines,i=0){
+    if(i>=lines.length) return;
+
+    typeLine(lines[i],()=>{
+      setTimeout(()=>runConsole(lines,i+1),400);
+    });
+  }
+
+  runConsole(consoleLines);
+
+});
+</script>
+
+<% } %>
+<a href="/" style="display: inline-block; margin-top: 20px; text-decoration: none; color: #333;">
+        🏠 Back to Home
+      </a>
+</div>
+</body>
+</html>

@@ -1,72 +1,190 @@
-<% completed=completed || []; %>
+<% completed = completed || []; %>
 
-  <h1>NJ SecForge</h1>
-  <h3>OWASP Top 10 Interactive Labs</h3>
+<!DOCTYPE html>
 
-  <hr>
-  <h2>📊 Your Progress</h2>
+<html>
+<head>
+  <title>NJ SecForge</title>
 
-  <p>
-    <b>
-      <%= completedCount %>
-    </b> /
-    <b>
-      <%= totalLabs %>
-    </b> Labs Completed
-  </p>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#f5f7fb;
+      margin:0;
+      padding:0;
+    }
 
-  <div style="
-  width:400px;
-  background:#eee;
-  border-radius:10px;
-  overflow:hidden;
-  margin-bottom:20px;
-">
+    .container {
+      max-width:1200px;
+      margin:auto;
+      padding:30px;
+    }
 
-    <div style="
-    width:<%= percentage %>%;
-    background:
-<%= percentage === 100 ? " #2196F3" : "#4CAF50" %>;
+    h1 {
+      margin-bottom:5px;
+    }
+
+    .subtitle {
+      color:#666;
+      margin-bottom:25px;
+    }
+
+    /* ---------- Progress Card ---------- */
+
+    .progress-card {
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom:30px;
+    }
+
+    .progress-bar {
+      width:100%;
+      background:#eee;
+      border-radius:8px;
+      overflow:hidden;
+      margin-top:10px;
+    }
+
+    .progress-fill {
+      height:22px;
       color:white;
-      padding:8px;
       text-align:center;
-      ">
-      <%= percentage %>%
-    </div>
+      line-height:22px;
+      font-size:14px;
+      background:<%= percentage === 100 ? "#2196F3" : "#4CAF50" %>;
+      width:<%= percentage %>%;
+      transition: width .4s ease;
+    }
+
+    /* ---------- Grid Layout ---------- */
+
+    .lab-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+      gap:20px;
+    }
+
+    /* ---------- Lab Card ---------- */
+
+    .lab-card {
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      transition:.25s;
+    }
+
+    .lab-card:hover {
+      transform:translateY(-5px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .badge {
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:6px;
+      font-size:12px;
+      margin-top:6px;
+      background:#eef2ff;
+    }
+
+    .completed {
+      color:#2e7d32;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    .not-completed {
+      color:#c62828;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    .start-btn {
+      display:inline-block;
+      margin-top:15px;
+      padding:8px 14px;
+      background:#333;
+      color:white;
+      text-decoration:none;
+      border-radius:6px;
+    }
+
+    .start-btn:hover {
+      background:black;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🔥 NJ SecForge</h1>
+  <div class="subtitle">OWASP Top 10 Interactive Labs</div>
+
+  <!-- Progress Section -->
+
+  <div class="progress-card">
+    <h2>📊 Your Progress</h2>
+
+
+<p>
+  <b><%= completedCount %></b> /
+  <b><%= totalLabs %></b> Labs Completed
+</p>
+
+<div class="progress-bar">
+  <div class="progress-fill">
+    <%= percentage %>%
+  </div>
+</div>
+
 
   </div>
 
-  <% labs.forEach(lab=> { %>
+  <!-- Lab Cards -->
+
+  <div class="lab-grid">
 
 
-    <div style="
-    border:1px solid #ccc;
-    padding:15px;
-    margin:10px;
-  ">
+<% labs.forEach(lab => { %>
 
-      <h2>
-        <%= lab.title %>
-      </h2>
-      <p><b>OWASP:</b>
-        <%= lab.owasp %>
-      </p>
-      <p><b>Difficulty:</b>
-        <%= lab.difficulty %>
-      </p>
+  <% const isCompleted = completed
+    .map(l => l.trim().toLowerCase())
+    .includes(lab.name.trim().toLowerCase());
+  %>
 
-      <% const isCompleted=completed .map(l=> l.trim().toLowerCase())
-        .includes(lab.name.trim().toLowerCase());
-        %>
+  <div class="lab-card">
 
-        <% if (isCompleted) { %>
-          <p style="color:green;">✔ Completed</p>
-          <% } else { %>
-            <p style="color:red;">Not Completed</p>
-            <% } %>
-              <a href="/lab/<%= lab.name %>?mode=vulnerable">
-                Start Lab →
-              </a>
+    <h2><%= lab.title %></h2>
 
-    </div>
-    <% }) %>
+    <div class="badge">OWASP: <%= lab.owasp %></div><br>
+    <div class="badge">Difficulty: <%= lab.difficulty %></div>
+
+    <% if (isCompleted) { %>
+      <div class="completed">✔ Completed</div>
+    <% } else { %>
+      <div class="not-completed">Not Completed</div>
+    <% } %>
+
+    <a class="start-btn"
+       href="/lab/<%= lab.name %>?mode=vulnerable">
+       Start Lab →
+    </a>
+
+  </div>
+
+<% }) %>
+
+
+  </div>
+
+</div>
+
+</body>
+</html>

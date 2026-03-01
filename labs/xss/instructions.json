@@ -1,0 +1,11 @@
+{
+  "title": "Cross-Site Scripting (XSS)",
+  "goal": "Execute JavaScript inside the application input field.",
+  "hint": "Try injecting a script tag.",
+  "difficulty": "Easy",
+  "owasp": "A03: Injection",
+  "challenge": {
+    "type": "xss-alert",
+    "successMessage": "You executed JavaScript via XSS!"
+  }
+}
