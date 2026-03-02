@@ -92,7 +92,7 @@ Open in browser:
 ---
 
 ## 📂 Project Structure
-
+```
 .
 └── nj-secforge/
     ├── config/ # Database configuration
@@ -114,6 +114,7 @@ Open in browser:
     │   └── partials/ # Header & Footer
     ├── server.js # App entry point
     └── package.json
+```
 
 ---
 
