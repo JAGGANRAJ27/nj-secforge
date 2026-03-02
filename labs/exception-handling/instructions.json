@@ -1,0 +1,34 @@
+{
+  "title": "Exceptional Condition Handling - Error Leakage",
+  "goal": "Trigger an application error and observe leaked information.",
+  "hint": "Try unexpected input.",
+  "difficulty": "Easy",
+  "owasp": "A10:2025 - Mishandling of Exceptional Conditions",
+
+  "challenge": {
+    "type": "exception-leak",
+    "successMessage": "You revealed sensitive system information!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application returned internal error details directly to the user.",
+      "code": "res.send(err.stack);",
+      "answer": "Internal errors should never be exposed publicly."
+    },
+    "attackFlow": {
+      "steps": [
+        "User provided invalid input.",
+        "Application threw exception.",
+        "Stack trace returned to browser.",
+        "Sensitive information exposed."
+      ],
+      "answer": "Error messages revealed internal system structure."
+    },
+    "secureFix": {
+      "explanation": "Applications should log errors internally but show generic messages to users.",
+      "code": "console.error(err); res.send('Something went wrong');",
+      "answer": "Separate internal logging from user-facing responses."
+    }
+  }
+}

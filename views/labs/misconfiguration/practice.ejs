@@ -1,0 +1,22 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Enable Debug Mode</b></label>
+
+  <input
+    name="username"
+    placeholder="false"
+    style="width:100%;padding:10px;margin-top:10px;"
+  >
+
+  <input type="hidden" name="password" value="debug">
+
+  <button style="margin-top:15px;">
+    Load Panel
+  </button>
+
+</form>
+
+<p style="margin-top:10px;color:#777;">
+Try changing <b>false → true</b>
+</p>

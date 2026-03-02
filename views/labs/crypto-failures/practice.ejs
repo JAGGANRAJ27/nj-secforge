@@ -1,0 +1,32 @@
+<!-- =====================================
+   CRYPTO FAILURES PRACTICE AREA
+===================================== -->
+
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Username</b></label>
+  <input
+    name="username"
+    placeholder="admin"
+    required
+  >
+
+  <label style="margin-top:10px;display:block;">
+    <b>Password</b>
+  </label>
+  <input
+    name="password"
+    placeholder="Enter password"
+    required
+  >
+
+  <button style="margin-top:15px;">
+    Login
+  </button>
+
+</form>
+
+<p style="margin-top:12px;color:#666;">
+💡 Tip: Sometimes databases leak sensitive information.
+</p>

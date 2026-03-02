@@ -1,21 +1,19 @@
 const path = require("path");
 const fs = require("fs");
 
-function loadReset(labName) {
+module.exports = function(name) {
 
   const resetPath = path.join(
     __dirname,
     "..",
     "labs",
-    labName,
+    name,
     "reset.js"
   );
 
-  if (!fs.existsSync(resetPath)) {
-    return null;
+  if (fs.existsSync(resetPath)) {
+    return require(resetPath);
   }
 
-  return require(resetPath);
-}
-
-module.exports = loadReset;
+  return null;
+};

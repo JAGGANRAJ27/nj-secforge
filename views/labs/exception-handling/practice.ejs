@@ -1,0 +1,21 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Search Input</b></label>
+
+  <input
+    name="username"
+    placeholder="Enter search text"
+  >
+
+  <input type="hidden" name="password" value="exception">
+
+  <button style="margin-top:15px;">
+    Search
+  </button>
+
+</form>
+
+<p style="margin-top:10px;color:#666;">
+💡 Try entering unexpected characters like '
+</p>

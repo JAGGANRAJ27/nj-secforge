@@ -1,0 +1,22 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Enter Session ID</b></label>
+
+  <input
+    name="username"
+    placeholder="1001"
+    style="width:100%;padding:10px;margin-top:10px;"
+  >
+
+  <input type="hidden" name="password" value="auth">
+
+  <button style="margin-top:15px;">
+    Validate Session
+  </button>
+
+</form>
+
+<p style="margin-top:10px;color:#777;">
+Try changing the session number 👀
+</p>

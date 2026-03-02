@@ -1,0 +1,23 @@
+<div class="lab-card">
+
+  <h3><%= lab.owasp %></h3>
+
+  <div class="badge">
+    <%= lab.title %>
+  </div>
+
+  <div class="badge">
+    Difficulty: <%= lab.difficulty %>
+  </div>
+
+  <% if (completed.includes(lab.name)) { %>
+    <p style="color:green;">✔ Completed</p>
+  <% } else { %>
+    <p style="color:red;">Not Completed</p>
+  <% } %>
+
+  <a class="start-btn" href="/lab/<%= lab.name %>?mode=secure">
+    Start Lab →
+  </a>
+
+</div>

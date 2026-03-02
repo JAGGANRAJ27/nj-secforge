@@ -1,0 +1,35 @@
+{
+  "title": "Cryptographic Failures - Plaintext Password Storage",
+  "goal": "Find the admin password from exposed data and login.",
+  "hint": "Sensitive data should never be stored directly.",
+  "difficulty": "Easy",
+  "owasp": "A04:2025 - Cryptographic Failures",
+
+  "challenge": {
+    "type": "crypto-login",
+    "successMessage": "You exploited plaintext password storage!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "Passwords were stored directly in the database without encryption or hashing.",
+      "code": "INSERT INTO users (username,password) VALUES ('admin','admin123');",
+      "answer": "Anyone accessing the database can read passwords instantly."
+    },
+
+    "attackFlow": {
+      "steps": [
+        "Database exposed user records.",
+        "Attacker viewed plaintext passwords.",
+        "Password reused to login as admin."
+      ],
+      "answer": "Plaintext storage converts data leaks into account compromise."
+    },
+
+    "secureFix": {
+      "explanation": "Passwords must be hashed using strong algorithms like bcrypt.",
+      "code": "bcrypt.hash(password, 10);",
+      "answer": "Hashing prevents attackers from recovering original passwords."
+    }
+  }
+}

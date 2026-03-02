@@ -1,0 +1,26 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Session Data (JSON)</b></label>
+
+  <textarea name="username"
+    style="width:100%;height:120px;">
+{"user":"guest","role":"user"}
+  </textarea>
+
+  <label style="margin-top:10px;">
+    <b>Signature</b>
+  </label>
+
+  <input name="password"
+         placeholder="leave empty">
+
+  <button style="margin-top:15px;">
+    Validate Session
+  </button>
+
+</form>
+
+<p style="color:#666;margin-top:10px;">
+💡 Try modifying <b>role</b>.
+</p>

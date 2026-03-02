@@ -1,0 +1,21 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Input Data</b></label>
+
+  <input
+    name="username"
+    placeholder="process-data"
+  >
+
+  <input type="hidden" name="password" value="supply">
+
+  <button style="margin-top:15px;">
+    Run Dependency
+  </button>
+
+</form>
+
+<p style="margin-top:10px;color:#666;">
+💡 Dependencies may execute hidden logic.
+</p>

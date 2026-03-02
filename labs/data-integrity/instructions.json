@@ -1,0 +1,34 @@
+{
+  "title": "Data Integrity Failure - Tampered Session",
+  "goal": "Modify session data to become admin.",
+  "hint": "Can client data be trusted?",
+  "difficulty": "Medium",
+  "owasp": "A08:2025 - Software and Data Integrity Failures",
+
+  "challenge": {
+    "type": "data-tamper",
+    "successMessage": "You modified data integrity successfully!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application trusted client-provided session data without verifying integrity.",
+      "code": "const session = JSON.parse(req.body.session);",
+      "answer": "Client data must always be validated or signed."
+    },
+    "attackFlow": {
+      "steps": [
+        "Application accepted session data from client.",
+        "User modified role value.",
+        "Server trusted modified data.",
+        "Privileges escalated."
+      ],
+      "answer": "Integrity failure allowed privilege escalation."
+    },
+    "secureFix": {
+      "explanation": "Sensitive data should be signed or verified using cryptographic integrity checks.",
+      "code": "verifySignature(session, secretKey);",
+      "answer": "Digital signatures prevent tampering."
+    }
+  }
+}

@@ -1,0 +1,118 @@
+/* ===============================
+   GLOBAL HEADER
+================================= */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: #111827;
+  color: white;
+
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 14px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Brand */
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.brand span {
+  color: #93c5fd;
+}
+
+/* Tagline */
+.tagline {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* Navigation */
+.nav-links a {
+  color: #e5e7eb;
+  text-decoration: none;
+  margin-left: 18px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: #93c5fd;
+}
+
+/* Prevent content hiding under sticky header */
+body {
+  margin: 0;
+}
+
+.container {
+  padding-top: 20px;
+}
+
+/* ===============================
+   NJ SECFORGE FOOTER
+================================= */
+
+.site-footer {
+  margin-top: 60px;
+  padding: 30px 15px;
+  text-align: center;
+  background: #111827;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.footer-main {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.footer-links a {
+  color: #93c5fd;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-open {
+  margin-top: 10px;
+  color: #94a3b8;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-tagline {
+  margin-top: 12px;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #64748b;
+}
+
+.heart {
+  animation: heartbeat 1.5s infinite;
+}
+
+/* subtle heart animation */
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}

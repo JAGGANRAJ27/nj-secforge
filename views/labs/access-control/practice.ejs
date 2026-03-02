@@ -1,0 +1,23 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Enter Role</b></label>
+
+  <input
+    name="username"
+    placeholder="user"
+    style="width:100%;padding:10px;margin-top:10px;"
+  >
+
+  <!-- engine compatibility -->
+  <input type="hidden" name="password" value="access">
+
+  <button style="margin-top:15px;">
+    Access Panel
+  </button>
+
+</form>
+
+<p style="margin-top:10px;color:#777;">
+Try changing <b>user → admin</b>
+</p>

@@ -1,0 +1,36 @@
+{
+  "title": "Broken Access Control - Role Manipulation",
+  "goal": "Access the admin panel without admin privileges.",
+  "hint": "Try modifying the role parameter.",
+  "difficulty": "Easy",
+  "owasp": "A01:2025 - Broken Access Control",
+
+  "challenge": {
+    "type": "access-control",
+    "successMessage": "You accessed admin functionality!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application trusted user-controlled input to determine authorization.",
+      "code": "if(req.query.role === 'admin'){ showAdmin(); }",
+      "answer": "Authorization must never depend on user input."
+    },
+
+    "attackFlow": {
+      "steps": [
+        "User accessed panel as normal user.",
+        "User modified role parameter.",
+        "Server trusted request parameter.",
+        "Admin access granted."
+      ],
+      "answer": "Changing role=user to role=admin bypassed authorization."
+    },
+
+    "secureFix": {
+      "explanation": "Authorization should be verified using server-side user data.",
+      "code": "if(user.role === 'admin'){ showAdmin(); }",
+      "answer": "Always validate permissions on server-side sessions."
+    }
+  }
+}

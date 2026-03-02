@@ -1,0 +1,36 @@
+{
+  "title": "Security Misconfiguration - Exposed Debug Panel",
+  "goal": "Access the hidden debug information.",
+  "hint": "Developers sometimes forget to disable debug mode.",
+  "difficulty": "Easy",
+  "owasp": "A02:2025 - Security Misconfiguration",
+
+  "challenge": {
+    "type": "misconfiguration",
+    "successMessage": "Debug panel exposed!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application allowed debug mode through a user-controlled parameter.",
+      "code": "if(req.query.mode === 'true'){ showDebug(); }",
+      "answer": "Production systems must never trust client-controlled debug flags."
+    },
+
+    "attackFlow": {
+      "steps": [
+        "User explored application.",
+        "Discovered debug parameter.",
+        "Enabled debug mode manually.",
+        "Sensitive data became visible."
+      ],
+      "answer": "Changing mode=false to mode=true exposed debug data."
+    },
+
+    "secureFix": {
+      "explanation": "Debug features should depend on server environment variables only.",
+      "code": "if(process.env.NODE_ENV !== 'production'){ showDebug(); }",
+      "answer": "Never expose debug controls to users."
+    }
+  }
+}

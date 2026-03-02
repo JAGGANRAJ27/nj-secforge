@@ -3,21 +3,33 @@ const fs = require("fs");
 
 function loadLab(labName, mode = "vulnerable") {
 
-  const basePath = path.join(__dirname, "..", "labs", labName);
+  const labPath = path.join(__dirname, "..", "labs", labName);
 
-  if (!fs.existsSync(basePath)) return null;
+  if (!fs.existsSync(labPath)) return null;
 
-  const instructions = require(path.join(basePath, "instructions.json"));
+  const instructionsPath = path.join(labPath, "instructions.json");
 
-  const handler =
-    mode === "secure"
-      ? require(path.join(basePath, "secure.js"))
-      : require(path.join(basePath, "vulnerable.js"));
+  if (!fs.existsSync(instructionsPath)) return null;
+
+  const instructions = require(instructionsPath);
+
+  let handler = null;
+
+  const handlerFile =
+    mode === "secure" ? "secure.js" : "vulnerable.js";
+
+  const handlerPath = path.join(labPath, handlerFile);
+
+  // ⭐ check if handler exists
+  if (fs.existsSync(handlerPath)) {
+    handler = require(handlerPath);
+  }
 
   return {
     name: labName,
     instructions,
-    handler
+    handler,
+    underConstruction: handler === null
   };
 }
 

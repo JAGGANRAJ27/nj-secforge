@@ -1,0 +1,34 @@
+{
+  "title": "Insecure Design - Price Manipulation",
+  "goal": "Purchase premium item for a lower price.",
+  "hint": "Can users control values sent to server?",
+  "difficulty": "Medium",
+  "owasp": "A06:2025 - Insecure Design",
+
+  "challenge": {
+    "type": "price-manipulation",
+    "successMessage": "You exploited insecure business logic!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The server trusted the price sent by the client instead of validating it.",
+      "code": "const price = req.body.price;",
+      "answer": "Client-side values must never control business logic."
+    },
+    "attackFlow": {
+      "steps": [
+        "User inspected request.",
+        "Modified price parameter.",
+        "Server accepted manipulated value.",
+        "Purchase succeeded at fake price."
+      ],
+      "answer": "Attack succeeded because server trusted user input."
+    },
+    "secureFix": {
+      "explanation": "Server should calculate price internally.",
+      "code": "const price = PRODUCTS[itemId].price;",
+      "answer": "Critical values must come from server logic."
+    }
+  }
+}

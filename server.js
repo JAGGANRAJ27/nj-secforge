@@ -37,12 +37,22 @@ app.use((req, res, next) => {
 
 app.get("/", (req, res) => {
 
-  const labs = listLabs();
+  let labs = listLabs();
+
+  const filter = req.query.difficulty || "all";
+
+  /* Difficulty Filter */
+  if (filter !== "all") {
+    labs = labs.filter(
+      lab => lab.difficulty.toLowerCase() === filter.toLowerCase()
+    );
+  }
 
   progress.getProgress(req.user.username, (completed) => {
 
     const totalLabs = labs.length;
-    const completedCount = completed.length;
+    const completedCount =
+      labs.filter(l => completed.includes(l.name)).length;
 
     const percentage =
       totalLabs === 0
@@ -54,7 +64,8 @@ app.get("/", (req, res) => {
       completed,
       totalLabs,
       completedCount,
-      percentage
+      percentage,
+      filter
     });
 
   });
@@ -76,7 +87,8 @@ app.get("/lab/:name", (req, res) => {
   res.render("lab", {
     lab,
     mode,
-    consoleOutput: null
+    consoleOutput: null,
+    practiceView: `labs/${lab.name}/practice`
   });
 
 });
@@ -88,8 +100,17 @@ app.post("/attack/:name", (req, res) => {
   const mode = req.query.mode || "vulnerable";
   const lab = loadLab(req.params.name, mode);
 
-  if (!lab) {
-    return res.send("Lab not found");
+  if (!lab || !lab.handler) {
+    return res.render("lab", {
+      lab,
+      mode,
+      consoleOutput: {
+        success: false,
+        query: "",
+        message: "🚧 This lab is under construction.",
+        completed: false
+      }
+    });
   }
 
   const { username, password } = req.body;
@@ -113,10 +134,11 @@ app.post("/attack/:name", (req, res) => {
       mode,
       consoleOutput: {
         success: result && result.length > 0,
-        query: query || "Query unavailable",
-        message: challenge.message || "",
-        completed: challenge.completed || false
-      }
+        query,
+        message: challenge.message,
+        completed: challenge.completed
+      },
+      practiceView: `labs/${lab.name}/practice`
     });
 
   });
@@ -127,20 +149,61 @@ app.post("/attack/:name", (req, res) => {
 
 app.get("/reset/:name", (req, res) => {
 
-  const resetHandler = loadReset(req.params.name);
+  const labName = req.params.name;
+  const db = require("./config/db");
+  const resetHandler = loadReset(labName);
 
-  if (!resetHandler) {
-    return res.send("Reset not available for this lab");
+  db.run(
+    "DELETE FROM progress WHERE lab = ?",
+    [labName],
+    () => {
+
+      if (resetHandler) {
+        resetHandler(finish);
+      } else {
+        finish();
+      }
+    }
+  );
+
+  function finish() {
+    res.render("reset", { labName });
   }
 
-  resetHandler(() => {
+});
 
-    res.send(`
-      <h2>🔄 ${req.params.name.toUpperCase()} Lab Reset Successfully</h2>
-      <a href="/lab/${req.params.name}">
-        Return to Lab
-      </a>
-    `);
+/* ---------------- RESER ALL LABS ---------------- */
+app.get("/reset-all", (req, res) => {
+
+  const db = require("./config/db");
+
+  db.serialize(() => {
+
+    // reset lab environments
+    db.run("DELETE FROM users");
+
+    // reset progress
+    db.run("DELETE FROM progress");
+
+    // reset autoincrement counters
+    db.run("DELETE FROM sqlite_sequence WHERE name='users'");
+    db.run("DELETE FROM sqlite_sequence WHERE name='progress'");
+
+    // restore default users (for labs needing them)
+    db.run(`
+      INSERT INTO users (username,password,role,lab)
+      VALUES
+      ('admin','admin123','admin','sqli'),
+      ('user','1234','user','sqli'),
+      ('guest','xss','user','xss')
+    `, () => {
+
+      res.send(`
+        <h2>🔄 All Labs Reset Successfully</h2>
+        <a href="/">Return Home</a>
+      `);
+
+    });
 
   });
 

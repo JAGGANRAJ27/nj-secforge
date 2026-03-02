@@ -1,0 +1,33 @@
+{
+  "title": "Software Supply Chain Failure - Malicious Dependency",
+  "goal": "Trigger behavior caused by an untrusted dependency.",
+  "hint": "Not all libraries are safe.",
+  "difficulty": "Hard",
+  "owasp": "A03:2025 - Software Supply Chain Failures",
+
+  "challenge": {
+    "type": "supply-chain",
+    "successMessage": "Malicious dependency executed!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application used a third-party library without verifying its behavior.",
+      "code": "const helper = require('helper-lib');",
+      "answer": "Dependencies can introduce hidden malicious logic."
+    },
+    "attackFlow": {
+      "steps": [
+        "Application loaded external dependency.",
+        "Dependency executed hidden code.",
+        "Sensitive data leaked."
+      ],
+      "answer": "Supply chain attacks exploit trusted software components."
+    },
+    "secureFix": {
+      "explanation": "Dependencies must be verified, pinned, and audited.",
+      "code": "npm audit && dependency pinning",
+      "answer": "Always verify third-party software integrity."
+    }
+  }
+}

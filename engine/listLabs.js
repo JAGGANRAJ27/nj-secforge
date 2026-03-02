@@ -1,33 +1,36 @@
 const fs = require("fs");
 const path = require("path");
 
-function listLabs() {
+module.exports = function listLabs() {
 
-  const labsPath = path.join(__dirname, "..", "labs");
+  const labsDir = path.join(__dirname, "..", "labs");
 
-  const labFolders = fs.readdirSync(labsPath);
+  const labs = fs.readdirSync(labsDir)
+    .map(folder => {
 
-  const labs = [];
+      const instructionsPath =
+        path.join(labsDir, folder, "instructions.json");
 
-  labFolders.forEach(labName => {
+      if (!fs.existsSync(instructionsPath)) return null;
 
-    const instructionsPath =
-      path.join(labsPath, labName, "instructions.json");
+      const instructions =
+        JSON.parse(fs.readFileSync(instructionsPath));
 
-    if (fs.existsSync(instructionsPath)) {
+      const match = instructions.owasp.match(/A(\d+)/);
+      const number = match ? parseInt(match[1]) : 999;
 
-      const instructions = require(instructionsPath);
-
-      labs.push({
-        name: labName,
+      return {
+        name: folder,
         title: instructions.title,
         difficulty: instructions.difficulty,
-        owasp: instructions.owasp
-      });
-    }
-  });
+        owasp: instructions.owasp,
+        owaspNumber: number
+      };
+    })
+    .filter(Boolean);
+
+  /* SORT */
+  labs.sort((a, b) => a.owaspNumber - b.owaspNumber);
 
   return labs;
-}
-
-module.exports = listLabs;
+};

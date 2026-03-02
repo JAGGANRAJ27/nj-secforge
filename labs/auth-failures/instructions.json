@@ -1,0 +1,36 @@
+{
+  "title": "Authentication Failures - Predictable Session",
+  "goal": "Become admin by manipulating session ID.",
+  "hint": "Try changing the session number.",
+  "difficulty": "Easy",
+  "owasp": "A07:2025 - Authentication Failures",
+
+  "challenge": {
+    "type": "auth-failure",
+    "successMessage": "You hijacked an admin session!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application used predictable session IDs. Attackers could guess valid sessions.",
+      "code": "const sessionId = userId + 1000;",
+      "answer": "Session IDs must be random and unguessable."
+    },
+
+    "attackFlow": {
+      "steps": [
+        "User receives session ID.",
+        "Attacker notices pattern.",
+        "Attacker guesses admin session.",
+        "Server accepts forged session."
+      ],
+      "answer": "Changing session=1001 to session=1000 gave admin access."
+    },
+
+    "secureFix": {
+      "explanation": "Secure systems generate cryptographically random session tokens.",
+      "code": "crypto.randomBytes(32).toString('hex');",
+      "answer": "Use unpredictable session tokens."
+    }
+  }
+}

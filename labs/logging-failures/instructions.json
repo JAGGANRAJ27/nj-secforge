@@ -1,0 +1,35 @@
+{
+  "title": "Security Logging Failure - Invisible Attack",
+  "goal": "Trigger an alert by performing suspicious login attempts.",
+  "hint": "Try repeated failed logins.",
+  "difficulty": "Hard",
+  "owasp": "A09:2025 - Security Logging and Alerting Failures",
+
+  "challenge": {
+    "type": "logging-failure",
+    "successMessage": "Security alert triggered!"
+  },
+
+  "learning": {
+    "whyVulnerable": {
+      "explanation": "The application did not log authentication failures.",
+      "code": "// login failed but nothing recorded",
+      "answer": "Without logs, attacks remain invisible."
+    },
+
+    "attackFlow": {
+      "steps": [
+        "Attacker repeatedly attempted login.",
+        "System recorded nothing.",
+        "Administrator had no visibility."
+      ],
+      "answer": "Security monitoring failed because events were not logged."
+    },
+
+    "secureFix": {
+      "explanation": "Security systems must log suspicious actions and trigger alerts.",
+      "code": "logger.warn('Multiple login failures detected');",
+      "answer": "Logging enables detection and response."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<form method="POST"
+      action="/attack/<%= lab.name %>?mode=<%= mode %>">
+
+  <label><b>Username</b></label>
+  <input name="username" placeholder="admin">
+
+  <label style="margin-top:10px;">
+    <b>Password</b>
+  </label>
+  <input name="password" placeholder="wrong-password">
+
+  <button style="margin-top:15px;">
+    Login
+  </button>
+
+</form>
+
+<p style="color:#666;margin-top:10px;">
+💡 Try multiple failed logins.
+</p>

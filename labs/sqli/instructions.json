@@ -3,9 +3,39 @@
   "goal": "Login without knowing password",
   "hint": "Try SQL comment --",
   "difficulty": "Easy",
-  "owasp": "A03: Injection",
+  "owasp": "A05:2025 - Injection",
+
   "challenge": {
     "type": "login-bypass",
     "successMessage": "You bypassed authentication using SQL Injection!"
+  },
+
+  "learning": {
+
+    "whyVulnerable": {
+      "title": "Why the Vulnerable Version Was Exploited",
+      "explanation": "The application directly inserted user input into an SQL query. This allowed attackers to modify the query logic.",
+      "code": "const query = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;",
+      "answer": "User input becomes part of SQL syntax instead of data."
+    },
+
+    "attackFlow": {
+      "title": "What Happened During the Attack",
+      "steps": [
+        "User entered: admin' --",
+        "SQL comment (--) ignored password condition",
+        "Database executed modified query",
+        "Authentication succeeded without password"
+      ],
+      "answer": "Payload used: admin' --"
+    },
+
+    "secureFix": {
+      "title": "How Secure Code Prevents SQL Injection",
+      "explanation": "Prepared statements treat input as data instead of executable SQL.",
+      "code": "db.all('SELECT * FROM users WHERE username=? AND password=?', [username, password]);",
+      "answer": "Use parameterized queries / prepared statements."
+    }
+
   }
 }
